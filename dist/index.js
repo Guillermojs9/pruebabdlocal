@@ -27,12 +27,37 @@ function run() {
             path: "prueba",
             schema: [Usuario],
         });
-        /*
-            realm.write(() => {
-                realm.create('Person', { _id: 3, name: 'John Doe', age: 30 });
-                realm.create('Person', { _id: 4, name: 'Jane Smith', age: 25 });
+        //Consultar un solo usuario por clave primaria
+        //const usuario = realm.objectForPrimaryKey("Person", 7);
+        //Consultar todos los objetos "Person" de la base de datos
+        //const usuarios = realm.objects('Person');
+        //console.log(usuarios);
+        //Las operaciones hacia la base de datos deben hacerse dentro de una transacción de escritura
+        realm.write(() => {
+            //Insertar un registro en la base de datos
+            //realm.create('Person', { _id: 1, name: 'John Doe', age: 30 });
+            //Eliminar un registro de la base de datos
+            //Primero hacemos una consulta para sacar al usuario
+            //const usuario = realm.objectForPrimaryKey("Person", 10);
+            //realm.delete(usuario);
+            //Eliminar varios registros de la base de datos
+            //Hacemos la consulta para sacar todos los usuarios que se acorden a la consulta
+            //const usuariosBorrar = realm.objects("Person").filtered("_id >= 12");
+            //realm.delete(usuariosBorrar);
+            //Actualizar resgistros de la base de datos
+            /*
+                const usuario = realm.objectForPrimaryKey("Person", 11);
+                if(usuario)
+                    usuario.name = "Grace Purple Mod"
+                */
+            //Actualizar varios registros de la base de datos
+            const usuariosModificar = realm.objects("Person").filtered("_id >= 6");
+            // Usamos 'any' en la iteración para evitar el error de tipo
+            usuariosModificar.forEach((usuario) => {
+                usuario.name = "Nuevo Nombre";
+                usuario.age = 55;
             });
-        */
+        });
         const usuarios = realm.objects('Person');
         console.log(usuarios);
         realm.close();
