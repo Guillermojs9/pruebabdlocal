@@ -13,11 +13,65 @@ const realm_1 = require("realm");
 class Usuario extends realm_1.Realm.Object {
 }
 Usuario.schema = {
-    name: 'Person',
+    name: 'Usuario',
+    properties: {
+        _id: 'string',
+        nombre: 'string',
+        correo: 'string',
+        rutas: 'Ruta[]',
+        hash: 'string',
+        esDiscapacitado: 'bool',
+        age: 'int'
+    },
+    primaryKey: '_id',
+};
+class Ruta extends realm_1.Realm.Object {
+}
+Ruta.schema = {
+    name: 'Ruta',
+    properties: {
+        _id: 'string',
+        nombre: 'string',
+        checkpoints: 'Checkpoint[]',
+        dia: 'date',
+        compatibleDiscapacitados: 'bool',
+    },
+    primaryKey: '_id',
+};
+class Checkpoint extends realm_1.Realm.Object {
+}
+Checkpoint.schema = {
+    name: 'Checkpoint',
+    properties: {
+        _numero: 'int',
+        latitud: 'string',
+        longitud: 'string',
+        esTesoro: 'bool',
+    },
+    primaryKey: '_numero',
+};
+class Reseña extends realm_1.Realm.Object {
+}
+Reseña.schema = {
+    name: 'Reseña',
     properties: {
         _id: 'int',
-        name: 'string',
-        age: 'int',
+        usuario: 'Usuario',
+        valoracion: 'int',
+        imagen: 'string',
+        texto: 'string',
+    },
+    primaryKey: '_id',
+};
+class Reserva extends realm_1.Realm.Object {
+}
+Reserva.schema = {
+    name: 'Reserva',
+    properties: {
+        _id: 'string',
+        fecha: 'date',
+        usuario: 'Usuario',
+        numPersonas: 'int',
     },
     primaryKey: '_id',
 };
@@ -25,40 +79,14 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const realm = yield realm_1.Realm.open({
             path: "prueba",
-            schema: [Usuario],
+            schema: [Usuario, Checkpoint, Reseña, Reserva, Ruta],
         });
-        //Consultar un solo usuario por clave primaria
-        //const usuario = realm.objectForPrimaryKey("Person", 7);
-        //Consultar todos los objetos "Person" de la base de datos
-        //const usuarios = realm.objects('Person');
-        //console.log(usuarios);
-        //Las operaciones hacia la base de datos deben hacerse dentro de una transacción de escritura
         realm.write(() => {
-            //Insertar un registro en la base de datos
-            //realm.create('Person', { _id: 1, name: 'John Doe', age: 30 });
-            //Eliminar un registro de la base de datos
-            //Primero hacemos una consulta para sacar al usuario
-            //const usuario = realm.objectForPrimaryKey("Person", 10);
-            //realm.delete(usuario);
-            //Eliminar varios registros de la base de datos
-            //Hacemos la consulta para sacar todos los usuarios que se acorden a la consulta
-            //const usuariosBorrar = realm.objects("Person").filtered("_id >= 12");
-            //realm.delete(usuariosBorrar);
-            //Actualizar resgistros de la base de datos
-            /*
-                const usuario = realm.objectForPrimaryKey("Person", 11);
-                if(usuario)
-                    usuario.name = "Grace Purple Mod"
-                */
-            //Actualizar varios registros de la base de datos
-            const usuariosModificar = realm.objects("Person").filtered("_id >= 6");
-            // Usamos 'any' en la iteración para evitar el error de tipo
-            usuariosModificar.forEach((usuario) => {
-                usuario.name = "Nuevo Nombre";
-                usuario.age = 55;
-            });
+            const usuario1 = realm.create('Usuario', { _id: '1', nombre: 'Carlos Mendoza', correo: 'carlos.mendoza@email.com', age: 25, esDiscapacitado: false, hash: 'abc123', rutas: [] });
+            const usuario2 = realm.create('Usuario', { _id: '2', nombre: 'Ana López', correo: 'ana.lopez@email.com', age: 30, esDiscapacitado: true, hash: 'def456', rutas: [] });
+            const usuario3 = realm.create('Usuario', { _id: '3', nombre: 'Pedro Sánchez', correo: 'pedro.sanchez@email.com', age: 40, esDiscapacitado: false, hash: 'ghi789', rutas: [] });
         });
-        const usuarios = realm.objects('Person');
+        const usuarios = realm.objects('Usuario');
         console.log(usuarios);
         realm.close();
     });
