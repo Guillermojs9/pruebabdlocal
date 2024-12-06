@@ -11,16 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const realm_1 = require("realm");
 const Usuario_1 = require("./Usuario");
+const Checkpoint_1 = require("./Checkpoint");
+const Ruta_1 = require("./Ruta");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const realm = yield realm_1.Realm.open({
-            path: "prueba4",
-            schema: [Usuario_1.Usuario],
+            path: "prueba5",
+            schema: [Usuario_1.Usuario, Checkpoint_1.Checkpoint, Ruta_1.Ruta],
         });
         realm.write(() => {
-            //return new Usuario(realm, "30", "Luis", "luis@luis.com", 5, "123456", false, "ruta");
+            const usuario = realm.objectForPrimaryKey("Usuario", '2');
+            if (usuario)
+                realm.delete(usuario);
         });
-        const usuarios = realm.objects('Usuario');
+        const usuarios = realm.objects("Usuario");
         console.log(usuarios);
         realm.close();
     });

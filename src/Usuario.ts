@@ -1,10 +1,11 @@
-import { Realm } from "realm";
+import Realm from "realm";
+import { Ruta } from "./Ruta";
 
 export class Usuario extends Realm.Object<Usuario> {
     id!: string;
     username!: string;
     email!: string;
-    rutas!: number;
+    rutas!: Realm.List<Ruta>;
     hash!: string;
     esDiscapacitado!: boolean;
     avatar!: string;
@@ -15,16 +16,14 @@ export class Usuario extends Realm.Object<Usuario> {
             id: 'string',
             username: 'string',
             email: 'string',
-            rutas: 'int',
+            rutas: {
+                type: 'list',
+                objectType: 'Ruta',
+            },
             hash: 'string',
             esDiscapacitado: 'bool',
             avatar: 'string',
         },
         primaryKey: 'id',
     };
-
-    constructor(realm: Realm, id: string, username: string, email: string, rutas: number, hash: string, esDiscapacitado: boolean, avatar: string) {
-        super(realm, { id, username, email, rutas, hash, esDiscapacitado, avatar });
-    }
-
 }

@@ -1,16 +1,22 @@
 import { Realm } from "realm";
 import { Usuario } from "./Usuario";
+import { Checkpoint } from "./Checkpoint";
+import { Ruta } from "./Ruta";
 async function run() {
     const realm = await Realm.open({
-        path: "prueba4",
-        schema: [Usuario],
-    });
+        path: "prueba5",
+        schema: [Usuario, Checkpoint, Ruta],
+    } as Realm.Configuration);
+
 
     realm.write(() => {
-        //return new Usuario(realm, "30", "Luis", "luis@luis.com", 5, "123456", false, "ruta");
+
+        const usuario = realm.objectForPrimaryKey("Usuario", '2');
+        if (usuario)
+            realm.delete(usuario)
     });
 
-    const usuarios = realm.objects('Usuario');
+    const usuarios = realm.objects("Usuario");
     console.log(usuarios);
 
     realm.close();
